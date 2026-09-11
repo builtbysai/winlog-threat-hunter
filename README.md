@@ -12,6 +12,9 @@ provisioning, account lifecycle, endpoint management) - this is the
 detection side of that same coin: knowing what "wrong" looks like in the
 logs those actions generate.
 
+<p align="center"><img src="assets/terminal-demo.svg" width="800" alt="Terminal demo: hunting the brute-force sample log — 3 findings, plus the zero-finding control run and the --fail-on CI gate"></p>
+<p align="center"><img src="assets/detection-pipeline.svg" width="800" alt="Detection pipeline: exported events through parser and engine to four ATT&CK-mapped rules, reports, and the CI gate"></p>
+
 ## Why these four detections
 
 Rather than a large, shallow ruleset, this covers a small number of

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="740" viewBox="0 0 960 740">
+  <defs>
+    <pattern id="scanE" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="1.2" y="0" fill="#ffffff" opacity="0.022"/>
+    </pattern>
+    <linearGradient id="sheenE" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0e1412"/>
+      <stop offset="1" stop-color="#070b08"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="2" y="2" width="956" height="736" rx="14" fill="url(#sheenE)" stroke="#1d3a26" stroke-width="2"/>
+  <rect x="2" y="2" width="956" height="736" rx="14" fill="url(#scanE)"/>
+
+  <circle cx="30" cy="30" r="6.5" fill="#ff5f57"/>
+  <circle cx="52" cy="30" r="6.5" fill="#febc2e"/>
+  <circle cx="74" cy="30" r="6.5" fill="#28c840"/>
+  <text x="480" y="35" text-anchor="middle" font-family="Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="13" fill="#7ba98c">analyst@soc: ~/winlog-threat-hunter</text>
+  <rect x="830" y="19" width="98" height="22" rx="11" fill="#0f2417" stroke="#2fae5f"/>
+  <text x="879" y="35" text-anchor="middle" font-family="Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="11" fill="#33ff66" letter-spacing="1">NO AGENT</text>
+  <line x1="2" y1="52" x2="958" y2="52" stroke="#1d3a26" stroke-width="1"/>
+
+  <g font-family="Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14">
+    <text x="34" y="92"><tspan fill="#33ff66">$ </tspan><tspan fill="#e9f5ec">python -m winlog_threat_hunter.cli sample_logs/brute_force_attack.jsonl</tspan></text>
+
+    <text x="34" y="130" fill="#e9f5ec">WinLog Threat Hunter - analyzed 9 events, 3 finding(s)</text>
+    <text x="34" y="158"><tspan fill="#ff4d5e" font-weight="bold">CRITICAL: 2</tspan><tspan fill="#e9f5ec">  </tspan><tspan fill="#ff9f1c" font-weight="bold">HIGH: 1</tspan></text>
+
+    <text x="34" y="200"><tspan fill="#ff4d5e" font-weight="bold">[CRITICAL]</tspan><tspan fill="#e9f5ec"> Repeated failed logons (possible brute force / password spray)</tspan></text>
+    <text x="116" y="224" fill="#e9f5ec">- followed by successful logon</text>
+    <text x="116" y="248"><tspan fill="#54705f">rule: </tspan><tspan fill="#9db8a6">BRUTE-001</tspan><tspan fill="#54705f">   mitre: </tspan><tspan fill="#9db8a6">T1110 - Brute Force</tspan></text>
+    <text x="116" y="272"><tspan fill="#54705f">who/where: </tspan><tspan fill="#9db8a6">svc_backup / WIN-VPN01 / 45.33.12.7</tspan></text>
+    <text x="116" y="296"><tspan fill="#54705f">when: </tspan><tspan fill="#9db8a6">2026-08-20T02:10:00+00:00 → 2026-08-20T02:16:00+00:00</tspan></text>
+    <text x="116" y="320" fill="#9db8a6">7 failed logons for account 'svc_backup' … a successful logon from the</text>
+    <text x="116" y="344" fill="#9db8a6">same source followed shortly after — treat as likely compromise.</text>
+
+    <text x="34" y="386"><tspan fill="#ff9f1c" font-weight="bold">[HIGH&#160;&#160;&#160;&#160;]</tspan><tspan fill="#e9f5ec"> Special privileges assigned following a notable interactive logon</tspan></text>
+    <text x="116" y="410"><tspan fill="#54705f">rule: </tspan><tspan fill="#9db8a6">PRIVESC-001</tspan><tspan fill="#54705f">   mitre: </tspan><tspan fill="#9db8a6">T1078 - Valid Accounts</tspan></text>
+    <text x="116" y="434"><tspan fill="#54705f">who/where: </tspan><tspan fill="#9db8a6">svc_backup / WIN-VPN01 / 45.33.12.7</tspan></text>
+    <text x="34" y="466" fill="#54705f">… +1 more finding (BRUTE-001, per-source-IP burst cluster)</text>
+
+    <text x="34" y="510"><tspan fill="#33ff66">$ </tspan><tspan fill="#e9f5ec">python -m winlog_threat_hunter.cli sample_logs/normal_activity.jsonl</tspan></text>
+    <text x="34" y="538" fill="#e9f5ec">WinLog Threat Hunter - analyzed 10 events, 0 finding(s)</text>
+    <text x="34" y="566" fill="#33ff66">No findings. Nothing in this dataset matched a detection rule.</text>
+
+    <text x="34" y="610"><tspan fill="#33ff66">$ </tspan><tspan fill="#e9f5ec">python -m winlog_threat_hunter.cli sample_logs/brute_force_attack.jsonl --fail-on high; echo "exit=$?"</tspan></text>
+    <text x="34" y="638" fill="#e9f5ec">WinLog Threat Hunter - analyzed 9 events, 3 finding(s)</text>
+    <text x="34" y="666"><tspan fill="#e9f5ec">exit=</tspan><tspan fill="#ff4d5e" font-weight="bold">1</tspan><tspan fill="#54705f">  — CI gate tripped (finding at or above "high")</tspan></text>
+  </g>
+
+  <line x1="34" y1="690" x2="926" y2="690" stroke="#1d3a26" stroke-width="1"/>
+  <text x="480" y="712" text-anchor="middle" font-family="Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12" fill="#54705f">◈ reads exported .jsonl / .csv only · dependency-free · severity-sorted findings · JSON + CSV reports</text>
+</svg>
