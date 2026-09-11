@@ -114,3 +114,7 @@ in `tests/test_rules.py` is the regression test for it.
 
 MIT - see [LICENSE](LICENSE).
 
+
+---
+
+*Built by [Hans Sai](https://builtbysai.com).*
