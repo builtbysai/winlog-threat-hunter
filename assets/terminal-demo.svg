@@ -1,53 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="740" viewBox="0 0 960 740">
-  <defs>
-    <pattern id="scanE" width="4" height="4" patternUnits="userSpaceOnUse">
-      <rect width="4" height="1.2" y="0" fill="#ffffff" opacity="0.022"/>
-    </pattern>
-    <linearGradient id="sheenE" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#0e1412"/>
-      <stop offset="1" stop-color="#070b08"/>
-    </linearGradient>
-  </defs>
-
-  <rect x="2" y="2" width="956" height="736" rx="14" fill="url(#sheenE)" stroke="#1d3a26" stroke-width="2"/>
-  <rect x="2" y="2" width="956" height="736" rx="14" fill="url(#scanE)"/>
-
-  <circle cx="30" cy="30" r="6.5" fill="#ff5f57"/>
-  <circle cx="52" cy="30" r="6.5" fill="#febc2e"/>
-  <circle cx="74" cy="30" r="6.5" fill="#28c840"/>
-  <text x="480" y="35" text-anchor="middle" font-family="Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="13" fill="#7ba98c">analyst@soc: ~/winlog-threat-hunter</text>
-  <rect x="830" y="19" width="98" height="22" rx="11" fill="#0f2417" stroke="#2fae5f"/>
-  <text x="879" y="35" text-anchor="middle" font-family="Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="11" fill="#33ff66" letter-spacing="1">NO AGENT</text>
-  <line x1="2" y1="52" x2="958" y2="52" stroke="#1d3a26" stroke-width="1"/>
-
-  <g font-family="Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="14">
-    <text x="34" y="92"><tspan fill="#33ff66">$ </tspan><tspan fill="#e9f5ec">python -m winlog_threat_hunter.cli sample_logs/brute_force_attack.jsonl</tspan></text>
-
-    <text x="34" y="130" fill="#e9f5ec">WinLog Threat Hunter - analyzed 9 events, 3 finding(s)</text>
-    <text x="34" y="158"><tspan fill="#ff4d5e" font-weight="bold">CRITICAL: 2</tspan><tspan fill="#e9f5ec">  </tspan><tspan fill="#ff9f1c" font-weight="bold">HIGH: 1</tspan></text>
-
-    <text x="34" y="200"><tspan fill="#ff4d5e" font-weight="bold">[CRITICAL]</tspan><tspan fill="#e9f5ec"> Repeated failed logons (possible brute force / password spray)</tspan></text>
-    <text x="116" y="224" fill="#e9f5ec">- followed by successful logon</text>
-    <text x="116" y="248"><tspan fill="#54705f">rule: </tspan><tspan fill="#9db8a6">BRUTE-001</tspan><tspan fill="#54705f">   mitre: </tspan><tspan fill="#9db8a6">T1110 - Brute Force</tspan></text>
-    <text x="116" y="272"><tspan fill="#54705f">who/where: </tspan><tspan fill="#9db8a6">svc_backup / WIN-VPN01 / 45.33.12.7</tspan></text>
-    <text x="116" y="296"><tspan fill="#54705f">when: </tspan><tspan fill="#9db8a6">2026-08-20T02:10:00+00:00 → 2026-08-20T02:16:00+00:00</tspan></text>
-    <text x="116" y="320" fill="#9db8a6">7 failed logons for account 'svc_backup' … a successful logon from the</text>
-    <text x="116" y="344" fill="#9db8a6">same source followed shortly after — treat as likely compromise.</text>
-
-    <text x="34" y="386"><tspan fill="#ff9f1c" font-weight="bold">[HIGH&#160;&#160;&#160;&#160;]</tspan><tspan fill="#e9f5ec"> Special privileges assigned following a notable interactive logon</tspan></text>
-    <text x="116" y="410"><tspan fill="#54705f">rule: </tspan><tspan fill="#9db8a6">PRIVESC-001</tspan><tspan fill="#54705f">   mitre: </tspan><tspan fill="#9db8a6">T1078 - Valid Accounts</tspan></text>
-    <text x="116" y="434"><tspan fill="#54705f">who/where: </tspan><tspan fill="#9db8a6">svc_backup / WIN-VPN01 / 45.33.12.7</tspan></text>
-    <text x="34" y="466" fill="#54705f">… +1 more finding (BRUTE-001, per-source-IP burst cluster)</text>
-
-    <text x="34" y="510"><tspan fill="#33ff66">$ </tspan><tspan fill="#e9f5ec">python -m winlog_threat_hunter.cli sample_logs/normal_activity.jsonl</tspan></text>
-    <text x="34" y="538" fill="#e9f5ec">WinLog Threat Hunter - analyzed 10 events, 0 finding(s)</text>
-    <text x="34" y="566" fill="#33ff66">No findings. Nothing in this dataset matched a detection rule.</text>
-
-    <text x="34" y="610"><tspan fill="#33ff66">$ </tspan><tspan fill="#e9f5ec">python -m winlog_threat_hunter.cli sample_logs/brute_force_attack.jsonl --fail-on high; echo "exit=$?"</tspan></text>
-    <text x="34" y="638" fill="#e9f5ec">WinLog Threat Hunter - analyzed 9 events, 3 finding(s)</text>
-    <text x="34" y="666"><tspan fill="#e9f5ec">exit=</tspan><tspan fill="#ff4d5e" font-weight="bold">1</tspan><tspan fill="#54705f">  — CI gate tripped (finding at or above "high")</tspan></text>
-  </g>
-
-  <line x1="34" y1="690" x2="926" y2="690" stroke="#1d3a26" stroke-width="1"/>
-  <text x="480" y="712" text-anchor="middle" font-family="Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12" fill="#54705f">◈ reads exported .jsonl / .csv only · dependency-free · severity-sorted findings · JSON + CSV reports</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="750" viewBox="0 0 960 750">
+<rect x="1" y="1" width="958" height="750" rx="12" fill="#faf8f3" stroke="#e0dccf" stroke-width="1.5"/>
+<circle cx="30" cy="27" r="5.5" fill="#d9d4c6"/>
+<circle cx="48" cy="27" r="5.5" fill="#d9d4c6"/>
+<circle cx="66" cy="27" r="5.5" fill="#d9d4c6"/>
+<text x="480.0" y="32" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" fill="#9a9484" letter-spacing="2.5">CONSOLE · REAL RUN ON BUNDLED SAMPLE DATA</text>
+<line x1="1" y1="52" x2="959" y2="52" stroke="#e0dccf" stroke-width="1"/>
+<text x="36" y="84" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="14" fill="#23201a"><tspan fill="#9a9484">$ </tspan>python -m winlog_threat_hunter.cli sample_logs/brute_force_attack.jsonl</text>
+<text x="36" y="116" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="14" fill="#23201a">WinLog Threat Hunter - analyzed 9 events, 3 finding(s)</text>
+<rect x="36" y="126" width="118" height="22" rx="11" fill="#f5e3e0"/><text x="95" y="141" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" letter-spacing="1" fill="#b42318">CRITICAL · 2</text>
+<rect x="164" y="126" width="86" height="22" rx="11" fill="#f7ecd9"/><text x="207" y="141" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" letter-spacing="1" fill="#9a6700">HIGH · 1</text>
+<rect x="36" y="158" width="86" height="22" rx="11" fill="#f5e3e0"/><text x="79" y="173" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" letter-spacing="1" fill="#b42318">CRITICAL</text>
+<text x="132.24" y="174" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="14" fill="#23201a" font-weight="600">Repeated failed logons (possible brute force / password spray)</text>
+<text x="132.24" y="200" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="14" fill="#23201a" font-weight="600">- followed by successful logon</text>
+<text x="60" y="226" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="14" fill="#23201a"><tspan fill="#9a9484">rule: </tspan>BRUTE-001   mitre: T1110 - Brute Force</text>
+<text x="60" y="252" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="14" fill="#23201a"><tspan fill="#9a9484">who/where: </tspan>WIN-VPN01 / 45.33.12.7</text>
+<text x="60" y="278" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="14" fill="#23201a"><tspan fill="#9a9484">when: </tspan>2026-08-20T02:10:00+00:00 → 2026-08-20T02:16:00+00:00</text>
+<text x="60" y="304" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="14" fill="#23201a">7 failed logons for source_ip '45.33.12.7' between 2026-08-20T02:10:00+00:00 and</text>
+<text x="60" y="330" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="14" fill="#23201a">2026-08-20T02:16:00+00:00. A successful logon from the same source followed shortly after -</text>
+<text x="60" y="356" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="14" fill="#23201a">treat as a likely successful compromise, not just a blocked attempt.</text>
+<text x="36" y="388" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="13" fill="#9a9484">+ 2 more findings in this run:</text>
+<rect x="60" y="399" width="81" height="20" rx="10" fill="#f5e3e0"/><text x="101" y="413" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" letter-spacing="1" fill="#b42318">CRITICAL</text>
+<text x="151.28" y="414" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="13" fill="#6e695c">BRUTE-001 · T1110 — same 7-failure burst, clustered per-account (svc_backup / WIN-VPN01)</text>
+<rect x="60" y="425" width="52" height="20" rx="10" fill="#f7ecd9"/><text x="86" y="439" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" letter-spacing="1" fill="#9a6700">HIGH</text>
+<text x="121.64" y="440" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="13" fill="#6e695c">PRIVESC-001 · T1078 — special privileges after a logon preceded by 7 failed attempts</text>
+<line x1="36" y1="476" x2="924" y2="476" stroke="#ece7da" stroke-width="1"/>
+<text x="36" y="496" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="14" fill="#23201a"><tspan fill="#9a9484">$ </tspan>python -m winlog_threat_hunter.cli sample_logs/normal_activity.jsonl</text>
+<text x="36" y="528" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="14" fill="#23201a">WinLog Threat Hunter - analyzed 10 events, 0 finding(s)</text>
+<text x="36" y="554" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="14" fill="#6e695c">No findings. Nothing in this dataset matched a detection rule.</text>
+<line x1="36" y1="590" x2="924" y2="590" stroke="#ece7da" stroke-width="1"/>
+<text x="36" y="610" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="14" fill="#23201a"><tspan fill="#9a9484">$ </tspan>python -m winlog_threat_hunter.cli sample_logs/brute_force_attack.jsonl --fail-on high</text>
+<text x="36" y="642" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="14" fill="#23201a">WinLog Threat Hunter - analyzed 9 events, 3 finding(s)</text>
+<text x="36" y="668" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="14" fill="#23201a"><tspan font-weight="700">exit=1</tspan><tspan fill="#9a9484">  — CI gate tripped: a finding at or above "high" was present</tspan></text>
+<line x1="36" y1="702" x2="924" y2="702" stroke="#ece7da" stroke-width="1"/>
+<text x="480.0" y="724" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9a9484">reads exported .jsonl / .csv only · dependency-free Python · severity-sorted findings · console / JSON / CSV reports</text>
 </svg>

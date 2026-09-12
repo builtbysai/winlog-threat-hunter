@@ -1,92 +1,67 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
-  <defs>
-    <pattern id="scanF" width="4" height="4" patternUnits="userSpaceOnUse">
-      <rect width="4" height="1.2" y="0" fill="#ffffff" opacity="0.022"/>
-    </pattern>
-    <marker id="arrF" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
-      <path d="M0,0 L8,4.5 L0,9" fill="none" stroke="#2fae5f" stroke-width="1.6"/>
-    </marker>
-  </defs>
-
-  <rect x="2" y="2" width="1196" height="696" rx="14" fill="#070b08" stroke="#1d3a26" stroke-width="2"/>
-  <rect x="2" y="2" width="1196" height="696" rx="14" fill="url(#scanF)"/>
-
-  <g font-family="Menlo,Consolas,'DejaVu Sans Mono',monospace">
-    <text x="34" y="42" font-size="17" fill="#33ff66">from exported events to analyst-ready findings</text>
-    <text x="34" y="62" font-size="12" fill="#54705f">winlog-threat-hunter · four ATT&amp;CK-mapped rules, one engine, honest thresholds</text>
-
-    <!-- top row -->
-    <rect x="24" y="88" width="300" height="112" rx="10" fill="#0a100c" stroke="#2fae5f" stroke-width="1.5"/>
-    <text x="42" y="114" font-size="12" fill="#54705f">01 · events in</text>
-    <text x="42" y="138" font-size="12.5" fill="#e9f5ec">Get-WinEvent export</text>
-    <text x="42" y="160" font-size="12.5" fill="#e9f5ec">Winlogbeat (flattened)</text>
-    <text x="42" y="182" font-size="12.5" fill="#e9f5ec">Sysmon export</text>
-
-    <rect x="364" y="88" width="300" height="112" rx="10" fill="#0a100c" stroke="#2fae5f" stroke-width="1.5"/>
-    <text x="382" y="114" font-size="12" fill="#54705f">02 · parser.py</text>
-    <text x="382" y="140" font-size="13.5" fill="#e9f5ec">JSONL / CSV → Event</text>
-    <text x="382" y="164" font-size="12" fill="#7ba98c">time-sorted dataclasses</text>
-    <text x="382" y="186" font-size="12" fill="#7ba98c">extra fields preserved, ignored</text>
-
-    <rect x="704" y="88" width="472" height="112" rx="10" fill="#0a100c" stroke="#33ff66" stroke-width="2"/>
-    <text x="722" y="114" font-size="12" fill="#54705f">03 · engine.py</text>
-    <text x="722" y="140" font-size="13.5" fill="#e9f5ec">runs every rule over all events</text>
-    <text x="722" y="164" font-size="12" fill="#7ba98c">clusters 4625s into bursts before scoring</text>
-    <text x="722" y="186" font-size="12" fill="#7ba98c">findings sorted by severity</text>
-
-    <line x1="326" y1="144" x2="356" y2="144" stroke="#2fae5f" stroke-width="1.6" marker-end="url(#arrF)"/>
-    <line x1="666" y1="144" x2="696" y2="144" stroke="#2fae5f" stroke-width="1.6" marker-end="url(#arrF)"/>
-
-    <!-- distribution bus: down from engine, vertical in the column gap, stubs into each card -->
-    <line x1="940" y1="202" x2="940" y2="216" stroke="#2fae5f" stroke-width="1.5"/>
-    <line x1="600" y1="216" x2="940" y2="216" stroke="#2fae5f" stroke-width="1.5"/>
-    <line x1="600" y1="216" x2="600" y2="472" stroke="#2fae5f" stroke-width="1.5"/>
-    <line x1="600" y1="292" x2="590" y2="292" stroke="#2fae5f" stroke-width="1.3" marker-end="url(#arrF)"/>
-    <line x1="600" y1="292" x2="610" y2="292" stroke="#2fae5f" stroke-width="1.3" marker-end="url(#arrF)"/>
-    <line x1="600" y1="418" x2="590" y2="418" stroke="#2fae5f" stroke-width="1.3" marker-end="url(#arrF)"/>
-    <line x1="600" y1="418" x2="610" y2="418" stroke="#2fae5f" stroke-width="1.3" marker-end="url(#arrF)"/>
-
-    <!-- rule cards -->
-    <rect x="24" y="238" width="564" height="108" rx="10" fill="#0a100c" stroke="#2fae5f" stroke-width="1.5"/>
-    <text x="44" y="266" font-size="13.5" fill="#33ff66">BRUTE-001 · T1110 Brute Force</text>
-    <text x="44" y="290" font-size="12" fill="#9db8a6">failed-logon bursts — Security event 4625</text>
-    <text x="44" y="312" font-size="12" fill="#9db8a6">5+ failures in 10 min, per account or per source IP</text>
-    <text x="44" y="334" font-size="12" fill="#ff9f1c">→ CRITICAL when a success follows shortly after</text>
-
-    <rect x="612" y="238" width="564" height="108" rx="10" fill="#0a100c" stroke="#2fae5f" stroke-width="1.5"/>
-    <text x="632" y="266" font-size="13.5" fill="#33ff66">PRIVESC-001 · T1078 Valid Accounts</text>
-    <text x="632" y="290" font-size="12" fill="#9db8a6">special privileges assigned — event 4672</text>
-    <text x="632" y="312" font-size="12" fill="#9db8a6">right after an interactive / RDP logon</text>
-    <text x="632" y="334" font-size="12" fill="#ff9f1c">escalated if failed logons preceded that logon</text>
-
-    <rect x="24" y="364" width="564" height="108" rx="10" fill="#0a100c" stroke="#2fae5f" stroke-width="1.5"/>
-    <text x="44" y="392" font-size="13.5" fill="#33ff66">PROC-001 · T1059 / T1003 / T1105 / T1490</text>
-    <text x="44" y="416" font-size="12" fill="#9db8a6">process creation — 4688 / Sysmon EventID 1</text>
-    <text x="44" y="438" font-size="12" fill="#9db8a6">encoded PowerShell · mimikatz · SAM dumps ·</text>
-    <text x="44" y="460" font-size="12" fill="#9db8a6">certutil-as-downloader · net user /add · vssadmin</text>
-
-    <rect x="612" y="364" width="564" height="108" rx="10" fill="#0a100c" stroke="#2fae5f" stroke-width="1.5"/>
-    <text x="632" y="392" font-size="13.5" fill="#33ff66">PERSIST-001 · T1136 / T1098</text>
-    <text x="632" y="416" font-size="12" fill="#9db8a6">account created (4720) → privileged group</text>
-    <text x="632" y="438" font-size="12" fill="#9db8a6">(4732 / 4728 / 4756) within minutes</text>
-    <text x="632" y="460" font-size="12" fill="#ff9f1c">"create, then Domain-Admin" in one move</text>
-
-    <line x1="306" y1="474" x2="306" y2="500" stroke="#2fae5f" stroke-width="1.3" marker-end="url(#arrF)"/>
-    <line x1="894" y1="474" x2="894" y2="500" stroke="#2fae5f" stroke-width="1.3" marker-end="url(#arrF)"/>
-
-    <!-- bottom row -->
-    <rect x="24" y="508" width="564" height="120" rx="10" fill="#0a100c" stroke="#1d3a26" stroke-width="1.5"/>
-    <text x="42" y="534" font-size="12" fill="#54705f">04 · report.py — findings out</text>
-    <text x="42" y="560" font-size="13" fill="#e9f5ec">console (color-coded) · JSON · CSV</text>
-    <text x="42" y="584" font-size="12" fill="#9db8a6">--json-out / --csv-out / --no-color</text>
-    <text x="42" y="608" font-size="12" fill="#54705f">plain-English reasons an analyst can act on</text>
-
-    <rect x="612" y="508" width="564" height="120" rx="10" fill="#0a100c" stroke="#1d3a26" stroke-width="1.5"/>
-    <text x="630" y="534" font-size="12" fill="#54705f">05 · CI gate + honest negative control</text>
-    <text x="630" y="560" font-size="13" fill="#e9f5ec">--fail-on high → exit 1 when the bar is met</text>
-    <text x="630" y="584" font-size="12" fill="#9db8a6">normal_activity.jsonl → 0 findings by design</text>
-    <text x="630" y="608" font-size="12" fill="#54705f">a detector that only ever says "yes" isn't worth much</text>
-  </g>
-
-  <text x="600" y="668" text-anchor="middle" font-family="Menlo,Consolas,'DejaVu Sans Mono',monospace" font-size="12" fill="#54705f">◈ dependency-free Python · reads exports only, no live ingestion · thresholds are starting points, stated plainly</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="968" viewBox="0 0 1200 968">
+<rect x="1" y="1" width="1198" height="968" rx="12" fill="#faf8f3" stroke="#e0dccf" stroke-width="1.5"/>
+<text x="48" y="56" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9a9484" letter-spacing="2.5">WINLOG-THREAT-HUNTER · DETECTION PIPELINE</text>
+<text x="48" y="100" font-family="Georgia, 'Times New Roman', serif" font-size="36" fill="#23201a">From exported events to analyst-ready findings.</text>
+<text x="48" y="126" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#6e695c">four ATT&amp;CK-mapped rules · one engine · thresholds stated honestly</text>
+<rect x="48" y="170" width="352.0" height="132" rx="10" fill="#ffffff" stroke="#e0dccf" stroke-width="1.5"/>
+<text x="70" y="202" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9a9484" letter-spacing="1.5">01 · EVENTS IN</text>
+<text x="70" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#23201a">Get-WinEvent export</text>
+<text x="70" y="256" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#6e695c">flattened Winlogbeat</text>
+<text x="70" y="280" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#6e695c">Sysmon export</text>
+<rect x="424.0" y="170" width="352.0" height="132" rx="10" fill="#ffffff" stroke="#e0dccf" stroke-width="1.5"/>
+<text x="446.0" y="202" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9a9484" letter-spacing="1.5">02 · PARSER.PY</text>
+<text x="446.0" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#23201a">JSONL / CSV → Event dataclasses</text>
+<text x="446.0" y="256" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#6e695c">time-sorted on load</text>
+<text x="446.0" y="280" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#6e695c">extra fields preserved, ignored</text>
+<rect x="800.0" y="170" width="352.0" height="132" rx="10" fill="#ffffff" stroke="#e0dccf" stroke-width="1.5"/>
+<text x="822.0" y="202" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9a9484" letter-spacing="1.5">03 · ENGINE.PY</text>
+<text x="822.0" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#23201a">runs every rule over every event</text>
+<text x="822.0" y="256" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#6e695c">4625 bursts clustered before scoring</text>
+<text x="822.0" y="280" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#6e695c">findings sorted by severity</text>
+<line x1="404.0" y1="236.0" x2="420.0" y2="236.0" stroke="#b7b1a1" stroke-width="1.6"/><path d="M413.0,231.5 L420.0,236.0 L413.0,240.5" fill="none" stroke="#b7b1a1" stroke-width="1.6"/>
+<line x1="780.0" y1="236.0" x2="796.0" y2="236.0" stroke="#b7b1a1" stroke-width="1.6"/><path d="M789.0,231.5 L796.0,236.0 L789.0,240.5" fill="none" stroke="#b7b1a1" stroke-width="1.6"/>
+<line x1="976.0" y1="302" x2="976.0" y2="336" stroke="#b7b1a1" stroke-width="1.6"/><path d="M971.0,329 L976.0,336 L981.0,329" fill="none" stroke="#b7b1a1" stroke-width="1.6"/>
+<text x="48" y="344" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9a9484" letter-spacing="2">THE FOUR RULES — EACH EVALUATES EVERY EVENT</text>
+<rect x="48" y="362" width="540.0" height="172" rx="10" fill="#ffffff" stroke="#e0dccf" stroke-width="1.5"/>
+<text x="70" y="394" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="15" fill="#23201a" font-weight="700">BRUTE-001</text>
+<rect x="485" y="380" width="81" height="20" rx="10" fill="#f5e3e0"/><text x="525" y="394" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" letter-spacing="1" fill="#b42318">CRITICAL</text>
+<text x="70" y="420" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="12.5" fill="#9a9484">T1110 — Brute Force</text>
+<text x="70" y="450" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" fill="#6e695c">failed-logon bursts · Windows Security event 4625</text>
+<text x="70" y="474" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" fill="#6e695c">5+ failures in a 10-minute window, per account or per source IP</text>
+<text x="70" y="498" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" fill="#b42318" font-weight="600">→ critical when a successful logon follows shortly after</text>
+<rect x="612.0" y="362" width="540.0" height="172" rx="10" fill="#ffffff" stroke="#e0dccf" stroke-width="1.5"/>
+<text x="634.0" y="394" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="15" fill="#23201a" font-weight="700">PRIVESC-001</text>
+<rect x="1078" y="380" width="52" height="20" rx="10" fill="#f7ecd9"/><text x="1104" y="394" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" letter-spacing="1" fill="#9a6700">HIGH</text>
+<text x="634.0" y="420" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="12.5" fill="#9a9484">T1078 — Valid Accounts / Privilege Escalation</text>
+<text x="634.0" y="450" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" fill="#6e695c">special privileges assigned · event 4672</text>
+<text x="634.0" y="474" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" fill="#6e695c">immediately after an interactive / RDP logon</text>
+<text x="634.0" y="498" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" fill="#b42318" font-weight="600">→ high when failed logons preceded that logon</text>
+<rect x="48" y="554" width="540.0" height="172" rx="10" fill="#ffffff" stroke="#e0dccf" stroke-width="1.5"/>
+<text x="70" y="586" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="15" fill="#23201a" font-weight="700">PROC-001</text>
+<rect x="514" y="572" width="52" height="20" rx="10" fill="#f7ecd9"/><text x="540" y="586" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" letter-spacing="1" fill="#9a6700">HIGH</text>
+<text x="70" y="612" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="12.5" fill="#9a9484">T1059 · T1003 · T1105 · T1136 · T1490 · T1218.011</text>
+<text x="70" y="642" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" fill="#6e695c">process creation · 4688 / Sysmon EventID 1</text>
+<text x="70" y="666" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" fill="#6e695c">encoded PowerShell · mimikatz · SAM dumps · certutil-as-downloader</text>
+<text x="70" y="690" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" fill="#6e695c">net user /add · shadow-copy deletion · rundll32 proxying</text>
+<rect x="612.0" y="554" width="540.0" height="172" rx="10" fill="#ffffff" stroke="#e0dccf" stroke-width="1.5"/>
+<text x="634.0" y="586" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="15" fill="#23201a" font-weight="700">PERSIST-001</text>
+<rect x="1049" y="572" width="81" height="20" rx="10" fill="#f5e3e0"/><text x="1089" y="586" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" letter-spacing="1" fill="#b42318">CRITICAL</text>
+<text x="634.0" y="612" font-family="'SFMono-Regular', Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="12.5" fill="#9a9484">T1136 — Create Account · T1098 — Account Manipulation</text>
+<text x="634.0" y="642" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" fill="#6e695c">account created (4720) → privileged group (4732 / 4728 / 4756)</text>
+<text x="634.0" y="666" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" fill="#6e695c">within minutes of each other</text>
+<text x="634.0" y="690" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" fill="#b42318" font-weight="600">→ “create, then Domain Admin” in a single move</text>
+<line x1="318.0" y1="732" x2="318.0" y2="748" stroke="#b7b1a1" stroke-width="1.4"/><path d="M313.5,741 L318.0,748 L322.5,741" fill="none" stroke="#b7b1a1" stroke-width="1.4"/>
+<line x1="882.0" y1="732" x2="882.0" y2="748" stroke="#b7b1a1" stroke-width="1.4"/><path d="M877.5,741 L882.0,748 L886.5,741" fill="none" stroke="#b7b1a1" stroke-width="1.4"/>
+<rect x="48" y="754" width="540.0" height="132" rx="10" fill="#ffffff" stroke="#e0dccf" stroke-width="1.5"/>
+<text x="70" y="786" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9a9484" letter-spacing="1.5">04 · REPORT.PY — FINDINGS OUT</text>
+<text x="70" y="816" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#23201a">console (color-coded) · JSON · CSV</text>
+<text x="70" y="840" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#6e695c">flags: --json-out  --csv-out  --no-color</text>
+<text x="70" y="864" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#6e695c">plain-English reasons an analyst can act on</text>
+<rect x="612.0" y="754" width="540.0" height="132" rx="10" fill="#ffffff" stroke="#e0dccf" stroke-width="1.5"/>
+<text x="634.0" y="786" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#9a9484" letter-spacing="1.5">05 · CI GATE + NEGATIVE CONTROL</text>
+<text x="634.0" y="816" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#23201a">--fail-on high → exit 1 when the bar is met</text>
+<text x="634.0" y="840" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#6e695c">normal_activity.jsonl → 0 findings, by design</text>
+<text x="634.0" y="864" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#6e695c">“a detector that only ever says ‘yes’ isn’t worth much”</text>
+<line x1="48" y1="914" x2="1152" y2="914" stroke="#ece7da" stroke-width="1"/>
+<text x="600.0" y="938" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" fill="#9a9484">dependency-free Python · reads exports only — no live ingestion · thresholds are honest starting points, stated plainly</text>
 </svg>
