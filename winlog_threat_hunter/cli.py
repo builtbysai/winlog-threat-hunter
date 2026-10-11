@@ -4,6 +4,7 @@ import argparse
 import sys
 
 from .engine import run_rules
+from .html_report import write_html_report
 from .parser import load_events
 from .report import print_console_report, write_csv_report, write_json_report
 
@@ -16,6 +17,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("input", help="Path to a .jsonl or .csv event export")
     p.add_argument("--json-out", help="Write findings to this JSON file")
     p.add_argument("--csv-out", help="Write findings to this CSV file")
+    p.add_argument("--html-out", help="Write a self-contained HTML threat-board report to this file")
     p.add_argument("--no-color", action="store_true", help="Disable ANSI color in console output")
     p.add_argument("--fail-on", choices=["critical", "high", "medium", "low"],
                    help="Exit with a non-zero status if any finding at or above this severity is present (useful in CI)")
@@ -44,6 +46,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.csv_out:
         write_csv_report(findings, args.csv_out)
         print(f"Wrote CSV report: {args.csv_out}")
+    if args.html_out:
+        write_html_report(findings, events, args.html_out, source_name=args.input)
+        print(f"Wrote HTML report: {args.html_out}")
 
     if args.fail_on:
         threshold = _SEVERITY_ORDER[args.fail_on]
