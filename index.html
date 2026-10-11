@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Threat Board - WinLog Threat Hunter</title>
+<style>
+* { box-sizing: border-box; }
+:root { --bg: #0a0d12; --panel: #12161d; --panel-deep: #0d1117;
+        --border: #222b36; --text: #e8eef4; --muted: #8b98a5;
+        --ember: #ff5a52; --crit: #f85149; --high: #d29922;
+        --med: #6cb6ff; --low: #8b98a5;
+        --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Helvetica, Arial, sans-serif;
+        --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace; }
+body { margin: 0; background: var(--bg); color: var(--text);
+       font-family: var(--sans); line-height: 1.55; }
+.mast { max-width: 960px; margin: 0 auto; padding: 44px 40px 0; }
+.board-head { display: flex; gap: 18px; align-items: flex-start;
+              border-bottom: 3px solid var(--ember); padding-bottom: 22px; }
+.board-head .mark { flex: 0 0 auto; padding-top: 6px; }
+.kicker { font-family: var(--sans); font-size: 12px; letter-spacing: 3px;
+          color: var(--ember); text-transform: uppercase; margin: 0 0 8px;
+          font-weight: 700; }
+h1 { font-size: 40px; line-height: 1.1; margin: 0 0 10px; font-weight: 700;
+     letter-spacing: 0.5px; }
+.meta { font-family: var(--sans); font-size: 13.5px; color: var(--muted); margin: 0; }
+.meta b { color: var(--text); font-weight: 600; }
+.wrap { max-width: 960px; margin: 0 auto; padding: 0 40px 60px; }
+h2 { font-size: 22px; margin: 44px 0 14px; letter-spacing: 0.5px;
+     border-left: 3px solid var(--ember); padding-left: 12px; }
+h3 { font-size: 17px; margin: 0 0 8px; }
+p { margin: 0 0 12px; overflow-wrap: break-word; }
+.summary { display: flex; gap: 12px; flex-wrap: wrap; margin: 26px 0 6px; }
+.sev-chip { font-family: var(--sans); font-size: 12px; letter-spacing: 1.5px;
+            text-transform: uppercase; border: 1.5px solid; border-radius: 3px;
+            padding: 7px 14px; background: var(--panel); }
+.sev-chip b { font-size: 16px; }
+.bottom-line { background: var(--panel); border: 1px solid var(--border);
+               border-left: 4px solid var(--ember); padding: 16px 20px;
+               margin: 14px 0; font-size: 16px; }
+.bottom-line .n { font-family: var(--sans); font-size: 12px; color: var(--muted);
+                  letter-spacing: 1px; text-transform: uppercase; display: block;
+                  margin-bottom: 6px; }
+.all-clear { background: var(--panel); border: 1px solid var(--border);
+             border-left: 4px solid var(--low); padding: 26px 24px;
+             margin: 26px 0; font-size: 17px; }
+.card { background: var(--panel); border: 1px solid var(--border);
+        margin: 22px 0; border-radius: 4px; }
+.card-top { padding: 18px 22px 14px; border-bottom: 1px solid var(--border); }
+.card-tags { display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+             margin-bottom: 10px; }
+.sev-tag { font-family: var(--sans); font-size: 11px; font-weight: 700;
+           letter-spacing: 2px; text-transform: uppercase; color: #0a0d12;
+           border-radius: 2px; padding: 4px 10px; }
+.rule-tag { font-family: var(--mono); font-size: 12.5px;
+            border: 1px solid var(--border); border-radius: 2px; padding: 3px 9px;
+            color: var(--text); background: var(--bg); }
+.attack-tag { font-family: var(--sans); font-size: 12px; color: var(--muted);
+              border: 1px dashed #3a4450; border-radius: 2px; padding: 3px 9px; }
+.card-title { font-size: 21px; margin: 0; line-height: 1.3; }
+.card-body { padding: 18px 22px 20px; }
+.facts { display: grid; grid-template-columns: 130px 1fr; gap: 6px 14px;
+         font-family: var(--sans); font-size: 13.5px; margin: 0 0 16px;
+         padding: 12px 14px; background: var(--bg); border: 1px solid var(--border);
+         border-radius: 3px; }
+.facts dt { color: var(--muted); text-transform: uppercase; font-size: 11px;
+            letter-spacing: 1px; padding-top: 2px; }
+.facts dd { margin: 0; }
+.mono { font-family: var(--mono); }
+.sect-label { font-family: var(--sans); font-size: 11.5px; font-weight: 700;
+              letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
+              margin: 18px 0 8px; }
+ul.actions { margin: 0 0 4px; padding-left: 20px; font-family: var(--sans);
+             font-size: 14px; }
+ul.actions li { margin-bottom: 6px; }
+.evidence { background: #070a0e; color: #dfe7ef; border: 1px solid var(--border);
+            border-radius: 3px; padding: 14px 16px; overflow-x: auto;
+            margin: 8px 0 0; font-family: var(--mono); font-size: 12px;
+            line-height: 1.6; }
+.evidence .t { color: #6cb6ff; }
+.evidence .id { color: #d29922; }
+.timeline { list-style: none; margin: 6px 0 0; padding: 0 0 0 6px;
+             position: relative; --tl-col: 118px; }
+.timeline::before { content: ""; position: absolute; left: var(--tl-col); top: 8px;
+                    bottom: 8px; width: 2px; background: var(--ember); opacity: 0.65; }
+.tl-item { display: flex; gap: 16px; padding: 9px 0; position: relative; }
+.tl-time { flex: 0 0 90px; text-align: right; white-space: nowrap;
+           font-family: var(--mono); font-size: 12px; color: var(--muted);
+           padding-top: 3px; }
+.tl-dot { flex: 0 0 auto; width: 12px; height: 12px; border-radius: 50%;
+          background: var(--bg); border: 2.5px solid #3a4450; margin-top: 5px;
+          position: relative; z-index: 1; }
+.tl-item.flagged .tl-dot { border-color: var(--dc, #f85149);
+                           background: var(--dc, #f85149); }
+.tl-item.flagged .tl-text { font-weight: 400; }
+.tl-text { font-family: var(--sans); font-size: 13.5px; }
+.tl-text .eid { font-family: var(--mono); font-size: 11.5px;
+                background: var(--bg); border: 1px solid var(--border);
+                border-radius: 2px; padding: 1px 6px; margin-right: 8px;
+                white-space: nowrap; }
+.tl-item.flagged .tl-text .eid { border-color: var(--dc, #f85149);
+                                 color: var(--dc, #f85149); font-weight: 700; }
+.coverage { font-family: var(--sans); font-size: 13px; color: var(--muted);
+            border-top: 1px solid var(--border); margin-top: 40px; padding-top: 14px; }
+.foot { font-family: var(--sans); font-size: 12px; color: var(--muted);
+        text-align: center; margin: 34px 0 0; padding: 18px 0 8px;
+        border-top: 3px solid var(--ember); }
+@media print {
+  body { background: #fff; color: #111; }
+  .mast, .wrap { max-width: none; }
+  .board-head, .foot { border-color: #111; }
+  .kicker { color: #b3261e; }
+  .card, .bottom-line, .all-clear, .facts, .sev-chip, .rule-tag, .tl-text .eid {
+    background: #fff; color: #111; border-color: #999; }
+  .meta, .meta b, .facts dt, .sect-label, .coverage, .foot, .tl-time, .attack-tag {
+    color: #333; }
+  .evidence { background: #111; color: #eee; border-color: #111; }
+  .timeline::before { background: #b3261e; opacity: 1; }
+  .tl-item.flagged .tl-text .eid { color: #b3261e; border-color: #b3261e; }
+  .card, .bottom-line, .all-clear { break-inside: avoid; }
+}
+@media (max-width: 640px) {
+  .mast { padding: 28px 20px 0; } .wrap { padding: 0 20px 40px; }
+  h1 { font-size: 30px; }
+  .timeline::before { left: 11px; } .tl-time { display: none; }
+}
+
+</style>
+</head>
+<body>
+<header class="mast">
+  <div class="board-head">
+    <div class="mark"><svg width="34" height="40" viewBox="0 0 34 40" role="img" aria-label="Shield mark"><path d="M17 2 L30 8 V18 C30 29 24 35 17 38 C10 35 4 29 4 18 V8 Z" fill="none" stroke="#8b98a5" stroke-width="2.5"/><path d="M11 17 L15.5 21.5 L23.5 12.5" fill="none" stroke="#ff5a52" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div>
+      <p class="kicker">WinLog Threat Hunter</p>
+      <h1>Threat Board</h1>
+      <p class="meta">Source: <b>sample_logs/brute_force_attack.jsonl</b> &nbsp;|&nbsp;
+      Events analyzed: <b>9</b> &nbsp;|&nbsp;
+      Findings: <b>3</b> &nbsp;|&nbsp;
+      Generated: <b>2026-10-11 02:53:23 UTC</b></p>
+    </div>
+  </div>
+</header>
+<main class="wrap">
+  <h2>Summary</h2>
+  <div class="summary">
+<span class="sev-chip" style="color:#f85149;border-color:#f85149;">CRITICAL <b>2</b></span>
+<span class="sev-chip" style="color:#d29922;border-color:#d29922;">HIGH <b>1</b></span>
+<span class="sev-chip" style="color:#6cb6ff;border-color:#6cb6ff;">MEDIUM <b>0</b></span>
+<span class="sev-chip" style="color:#8b98a5;border-color:#8b98a5;">LOW <b>0</b></span>
+</div>
+  <h2>Bottom line</h2>
+<div class="bottom-line"><span class="n">Priority 1</span>Repeated failed logons (possible brute force / password spray) - followed by successful logon involving 45.33.12.7 (BRUTE-001, T1110 - Brute Force).</div>
+<div class="bottom-line"><span class="n">Priority 2</span>Repeated failed logons (possible brute force / password spray) - followed by successful logon involving svc_backup (BRUTE-001, T1110 - Brute Force).</div>
+<div class="bottom-line"><span class="n">Priority 3</span>Special privileges assigned following a notable interactive logon involving svc_backup (PRIVESC-001, T1078 - Valid Accounts / Privilege Escalation).</div>
+<h2>Findings</h2>
+<section class="card">
+  <div class="card-top">
+    <div class="card-tags">
+      <span class="sev-tag" style="background:#f85149;">CRITICAL</span>
+      <span class="rule-tag">BRUTE-001</span>
+      <span class="attack-tag">MITRE ATT&amp;CK: T1110 - Brute Force</span>
+    </div>
+    <h3 class="card-title">Repeated failed logons (possible brute force / password spray) - followed by successful logon</h3>
+  </div>
+  <div class="card-body">
+    <dl class="facts">
+      <dt>Account</dt><dd class="mono">not specified</dd>
+      <dt>Host</dt><dd class="mono">WIN-VPN01</dd>
+      <dt>Source IP</dt><dd class="mono">45.33.12.7</dd>
+      <dt>Window</dt><dd class="mono">2026-08-20 02:10:00 UTC to 2026-08-20 02:16:00 UTC</dd>
+      <dt>Events in scope</dt><dd class="mono">7</dd>
+    </dl>
+    <div class="sect-label">Analyst reasoning</div>
+    <p>7 failed logons for source_ip &#x27;45.33.12.7&#x27; between 2026-08-20T02:10:00+00:00 and 2026-08-20T02:16:00+00:00. A successful logon from the same source followed shortly after - treat as a likely successful compromise, not just a blocked attempt.</p>
+    <div class="sect-label">Why this matters</div>
+    <p>A burst of failed logons that ends in a success almost always means the password was guessed or sprayed. Treat the account as compromised until proven otherwise, not as a blocked attempt.</p>
+    <div class="sect-label">Recommended actions</div>
+    <ul class="actions">
+<li>Reset the account password and revoke its active sessions.</li>
+<li>Review what the account did after the successful logon.</li>
+<li>Investigate the source IP and check whether other accounts were targeted.</li>
+    </ul>
+    <div class="sect-label">Raw evidence (7 event(s) in scope)</div>
+<pre class="evidence">{&quot;event_id&quot;: 4625, &quot;timestamp&quot;: &quot;2026-08-20T02:10:00+00:00&quot;, &quot;host&quot;: &quot;WIN-VPN01&quot;, &quot;account_name&quot;: &quot;svc_backup&quot;, &quot;source_ip&quot;: &quot;45.33.12.7&quot;, &quot;logon_type&quot;: 10, &quot;status&quot;: &quot;failure&quot;}
+{&quot;event_id&quot;: 4625, &quot;timestamp&quot;: &quot;2026-08-20T02:11:00+00:00&quot;, &quot;host&quot;: &quot;WIN-VPN01&quot;, &quot;account_name&quot;: &quot;svc_backup&quot;, &quot;source_ip&quot;: &quot;45.33.12.7&quot;, &quot;logon_type&quot;: 10, &quot;status&quot;: &quot;failure&quot;}
+{&quot;event_id&quot;: 4625, &quot;timestamp&quot;: &quot;2026-08-20T02:12:00+00:00&quot;, &quot;host&quot;: &quot;WIN-VPN01&quot;, &quot;account_name&quot;: &quot;svc_backup&quot;, &quot;source_ip&quot;: &quot;45.33.12.7&quot;, &quot;logon_type&quot;: 10, &quot;status&quot;: &quot;failure&quot;}
+{&quot;event_id&quot;: 4625, &quot;timestamp&quot;: &quot;2026-08-20T02:13:00+00:00&quot;, &quot;host&quot;: &quot;WIN-VPN01&quot;, &quot;account_name&quot;: &quot;svc_backup&quot;, &quot;source_ip&quot;: &quot;45.33.12.7&quot;, &quot;logon_type&quot;: 10, &quot;status&quot;: &quot;failure&quot;}
+{&quot;event_id&quot;: 4625, &quot;timestamp&quot;: &quot;2026-08-20T02:14:00+00:00&quot;, &quot;host&quot;: &quot;WIN-VPN01&quot;, &quot;account_name&quot;: &quot;svc_backup&quot;, &quot;source_ip&quot;: &quot;45.33.12.7&quot;, &quot;logon_type&quot;: 10, &quot;status&quot;: &quot;failure&quot;}
+{&quot;event_id&quot;: 4625, &quot;timestamp&quot;: &quot;2026-08-20T02:15:00+00:00&quot;, &quot;host&quot;: &quot;WIN-VPN01&quot;, &quot;account_name&quot;: &quot;svc_backup&quot;, &quot;source_ip&quot;: &quot;45.33.12.7&quot;, &quot;logon_type&quot;: 10, &quot;status&quot;: &quot;failure&quot;}
+{&quot;event_id&quot;: 4625, &quot;timestamp&quot;: &quot;2026-08-20T02:16:00+00:00&quot;, &quot;host&quot;: &quot;WIN-VPN01&quot;, &quot;account_name&quot;: &quot;svc_backup&quot;, &quot;source_ip&quot;: &quot;45.33.12.7&quot;, &quot;logon_type&quot;: 10, &quot;status&quot;: &quot;failure&quot;}</pre>
+  </div>
+</section>
+<section class="card">
+  <div class="card-top">
+    <div class="card-tags">
+      <span class="sev-tag" style="background:#f85149;">CRITICAL</span>
+      <span class="rule-tag">BRUTE-001</span>
+      <span class="attack-tag">MITRE ATT&amp;CK: T1110 - Brute Force</span>
+    </div>
+    <h3 class="card-title">Repeated failed logons (possible brute force / password spray) - followed by successful logon</h3>
+  </div>
+  <div class="card-body">
+    <dl class="facts">
+      <dt>Account</dt><dd class="mono">svc_backup</dd>
+      <dt>Host</dt><dd class="mono">WIN-VPN01</dd>
+      <dt>Source IP</dt><dd class="mono">not specified</dd>
+      <dt>Window</dt><dd class="mono">2026-08-20 02:10:00 UTC to 2026-08-20 02:16:00 UTC</dd>
+      <dt>Events in scope</dt><dd class="mono">7</dd>
+    </dl>
+    <div class="sect-label">Analyst reasoning</div>
+    <p>7 failed logons for account &#x27;svc_backup&#x27; between 2026-08-20T02:10:00+00:00 and 2026-08-20T02:16:00+00:00. A successful logon from the same source followed shortly after - treat as a likely successful compromise, not just a blocked attempt.</p>
+    <div class="sect-label">Why this matters</div>
+    <p>A burst of failed logons that ends in a success almost always means the password was guessed or sprayed. Treat the account as compromised until proven otherwise, not as a blocked attempt.</p>
+    <div class="sect-label">Recommended actions</div>
+    <ul class="actions">
+<li>Reset the account password and revoke its active sessions.</li>
+<li>Review what the account did after the successful logon.</li>
+<li>Investigate the source IP and check whether other accounts were targeted.</li>
+    </ul>
+    <div class="sect-label">Raw evidence (7 event(s) in scope)</div>
+<pre class="evidence">{&quot;event_id&quot;: 4625, &quot;timestamp&quot;: &quot;2026-08-20T02:10:00+00:00&quot;, &quot;host&quot;: &quot;WIN-VPN01&quot;, &quot;account_name&quot;: &quot;svc_backup&quot;, &quot;source_ip&quot;: &quot;45.33.12.7&quot;, &quot;logon_type&quot;: 10, &quot;status&quot;: &quot;failure&quot;}
+{&quot;event_id&quot;: 4625, &quot;timestamp&quot;: &quot;2026-08-20T02:11:00+00:00&quot;, &quot;host&quot;: &quot;WIN-VPN01&quot;, &quot;account_name&quot;: &quot;svc_backup&quot;, &quot;source_ip&quot;: &quot;45.33.12.7&quot;, &quot;logon_type&quot;: 10, &quot;status&quot;: &quot;failure&quot;}
+{&quot;event_id&quot;: 4625, &quot;timestamp&quot;: &quot;2026-08-20T02:12:00+00:00&quot;, &quot;host&quot;: &quot;WIN-VPN01&quot;, &quot;account_name&quot;: &quot;svc_backup&quot;, &quot;source_ip&quot;: &quot;45.33.12.7&quot;, &quot;logon_type&quot;: 10, &quot;status&quot;: &quot;failure&quot;}
+{&quot;event_id&quot;: 4625, &quot;timestamp&quot;: &quot;2026-08-20T02:13:00+00:00&quot;, &quot;host&quot;: &quot;WIN-VPN01&quot;, &quot;account_name&quot;: &quot;svc_backup&quot;, &quot;source_ip&quot;: &quot;45.33.12.7&quot;, &quot;logon_type&quot;: 10, &quot;status&quot;: &quot;failure&quot;}
+{&quot;event_id&quot;: 4625, &quot;timestamp&quot;: &quot;2026-08-20T02:14:00+00:00&quot;, &quot;host&quot;: &quot;WIN-VPN01&quot;, &quot;account_name&quot;: &quot;svc_backup&quot;, &quot;source_ip&quot;: &quot;45.33.12.7&quot;, &quot;logon_type&quot;: 10, &quot;status&quot;: &quot;failure&quot;}
+{&quot;event_id&quot;: 4625, &quot;timestamp&quot;: &quot;2026-08-20T02:15:00+00:00&quot;, &quot;host&quot;: &quot;WIN-VPN01&quot;, &quot;account_name&quot;: &quot;svc_backup&quot;, &quot;source_ip&quot;: &quot;45.33.12.7&quot;, &quot;logon_type&quot;: 10, &quot;status&quot;: &quot;failure&quot;}
+{&quot;event_id&quot;: 4625, &quot;timestamp&quot;: &quot;2026-08-20T02:16:00+00:00&quot;, &quot;host&quot;: &quot;WIN-VPN01&quot;, &quot;account_name&quot;: &quot;svc_backup&quot;, &quot;source_ip&quot;: &quot;45.33.12.7&quot;, &quot;logon_type&quot;: 10, &quot;status&quot;: &quot;failure&quot;}</pre>
+  </div>
+</section>
+<section class="card">
+  <div class="card-top">
+    <div class="card-tags">
+      <span class="sev-tag" style="background:#d29922;">HIGH</span>
+      <span class="rule-tag">PRIVESC-001</span>
+      <span class="attack-tag">MITRE ATT&amp;CK: T1078 - Valid Accounts / Privilege Escalation</span>
+    </div>
+    <h3 class="card-title">Special privileges assigned following a notable interactive logon</h3>
+  </div>
+  <div class="card-body">
+    <dl class="facts">
+      <dt>Account</dt><dd class="mono">svc_backup</dd>
+      <dt>Host</dt><dd class="mono">WIN-VPN01</dd>
+      <dt>Source IP</dt><dd class="mono">45.33.12.7</dd>
+      <dt>Window</dt><dd class="mono">2026-08-20 02:18:00 UTC to 2026-08-20 02:18:15 UTC</dd>
+      <dt>Events in scope</dt><dd class="mono">8</dd>
+    </dl>
+    <div class="sect-label">Analyst reasoning</div>
+    <p>Account &#x27;svc_backup&#x27; was granted special privileges at 2026-08-20T02:18:15+00:00 following a logon type 10 at 2026-08-20T02:18:00+00:00 on WIN-VPN01. 7 failed logon(s) for this account preceded the successful logon - review as a potential compromised-account escalation.</p>
+    <div class="sect-label">Why this matters</div>
+    <p>Special privileges granted right after a suspicious logon suggest the session is being armed with administrative power. A routine admin rarely needs this exact sequence, especially outside business hours.</p>
+    <div class="sect-label">Recommended actions</div>
+    <ul class="actions">
+<li>Confirm the logon was expected and matches a ticketed change.</li>
+<li>Audit the privileged session: commands run and processes spawned.</li>
+<li>If the logon is unexplained, isolate the host and rotate credentials.</li>
+    </ul>
+    <div class="sect-label">Raw evidence (2 event(s) in scope)</div>
+<pre class="evidence">{&quot;event_id&quot;: 4624, &quot;timestamp&quot;: &quot;2026-08-20T02:18:00+00:00&quot;, &quot;host&quot;: &quot;WIN-VPN01&quot;, &quot;account_name&quot;: &quot;svc_backup&quot;, &quot;source_ip&quot;: &quot;45.33.12.7&quot;, &quot;logon_type&quot;: 10, &quot;status&quot;: &quot;success&quot;}
+{&quot;event_id&quot;: 4672, &quot;timestamp&quot;: &quot;2026-08-20T02:18:15+00:00&quot;, &quot;host&quot;: &quot;WIN-VPN01&quot;, &quot;account_name&quot;: &quot;svc_backup&quot;}</pre>
+  </div>
+</section>
+  <h2>How it unfolded</h2>
+  <p style="font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;font-size:14px;color:#8b98a5;">
+  Every event in the export, in order. Highlighted entries fall inside a finding window. All times UTC on 2026-08-20.</p>
+  <ol class="timeline">
+<li class="tl-item flagged" style="--dc:#f85149;"><span class="tl-time">02:10:00</span><span class="tl-dot"></span><span class="tl-text"><span class="eid">4625</span>Logon failure | account svc_backup | host WIN-VPN01 | from 45.33.12.7 | logon type 10</span></li>
+<li class="tl-item flagged" style="--dc:#f85149;"><span class="tl-time">02:11:00</span><span class="tl-dot"></span><span class="tl-text"><span class="eid">4625</span>Logon failure | account svc_backup | host WIN-VPN01 | from 45.33.12.7 | logon type 10</span></li>
+<li class="tl-item flagged" style="--dc:#f85149;"><span class="tl-time">02:12:00</span><span class="tl-dot"></span><span class="tl-text"><span class="eid">4625</span>Logon failure | account svc_backup | host WIN-VPN01 | from 45.33.12.7 | logon type 10</span></li>
+<li class="tl-item flagged" style="--dc:#f85149;"><span class="tl-time">02:13:00</span><span class="tl-dot"></span><span class="tl-text"><span class="eid">4625</span>Logon failure | account svc_backup | host WIN-VPN01 | from 45.33.12.7 | logon type 10</span></li>
+<li class="tl-item flagged" style="--dc:#f85149;"><span class="tl-time">02:14:00</span><span class="tl-dot"></span><span class="tl-text"><span class="eid">4625</span>Logon failure | account svc_backup | host WIN-VPN01 | from 45.33.12.7 | logon type 10</span></li>
+<li class="tl-item flagged" style="--dc:#f85149;"><span class="tl-time">02:15:00</span><span class="tl-dot"></span><span class="tl-text"><span class="eid">4625</span>Logon failure | account svc_backup | host WIN-VPN01 | from 45.33.12.7 | logon type 10</span></li>
+<li class="tl-item flagged" style="--dc:#f85149;"><span class="tl-time">02:16:00</span><span class="tl-dot"></span><span class="tl-text"><span class="eid">4625</span>Logon failure | account svc_backup | host WIN-VPN01 | from 45.33.12.7 | logon type 10</span></li>
+<li class="tl-item flagged" style="--dc:#d29922;"><span class="tl-time">02:18:00</span><span class="tl-dot"></span><span class="tl-text"><span class="eid">4624</span>Logon success | account svc_backup | host WIN-VPN01 | from 45.33.12.7 | logon type 10</span></li>
+<li class="tl-item flagged" style="--dc:#d29922;"><span class="tl-time">02:18:15</span><span class="tl-dot"></span><span class="tl-text"><span class="eid">4672</span>Special privileges assigned | account svc_backup | host WIN-VPN01</span></li>
+</ol>
+  <div class="coverage">
+    Coverage: rules BRUTE-001, PRIVESC-001 evaluated against
+    9 normalized Windows Security/Sysmon events. This report reflects
+    only the events in the loaded export; it is not a verdict on the whole environment.
+  </div>
+  <footer class="foot">Generated by WinLog Threat Hunter &middot; 2026-10-11 02:53:23 UTC &middot;
+  Treat findings as leads, not conclusions: verify before acting.</footer>
+</main>
+</body>
+</html>
